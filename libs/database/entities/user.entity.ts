@@ -3,6 +3,11 @@ import CustomBaseEntity from './base.entity';
 import { Address } from './address.entity';
 import { Video } from './video.entity';
 import { Comment } from './comment.entity';
+
+export enum UserRole {
+  Admin = 1,
+  User = 2,
+}
 @Entity()
 export class User extends CustomBaseEntity {
   @PrimaryGeneratedColumn()
@@ -21,7 +26,13 @@ export class User extends CustomBaseEntity {
   email: string;
 
   @Column()
-  status: string;
+  status: boolean;
+
+  @Column()
+  password: string;
+
+  @Column()
+  role: UserRole;
 
   @OneToMany(() => Address, (address) => address.user)
   address: Address;

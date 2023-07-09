@@ -2,6 +2,16 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseType } from 'typeorm';
+import { User } from '../entities/user.entity';
+import { Address } from '../entities/address.entity';
+import { CartProduct } from '../entities/cartProduct.entity';
+import { Collection } from '../entities/collection.entity';
+import { Comment } from '../entities/comment.entity';
+import { Order } from '../entities/order.entity';
+import { OrderProduct } from '../entities/orderProduct.entity';
+import { ProductCollection } from '../entities/productCollection.entity';
+import { Video } from '../entities/video.entity';
+import { Product } from '../entities/product.entity';
 
 @Module({
   imports: [
@@ -17,7 +27,18 @@ import { DatabaseType } from 'typeorm';
           username: databaseConfig.username,
           password: databaseConfig.password,
           database: databaseConfig.database,
-          entities: [],
+          entities: [
+            User,
+            Address,
+            CartProduct,
+            Collection,
+            Comment,
+            Order,
+            OrderProduct,
+            ProductCollection,
+            Video,
+            Product,
+          ],
           synchronize: false,
           autoLoadEntities: true,
           logging: databaseConfig.logging,
