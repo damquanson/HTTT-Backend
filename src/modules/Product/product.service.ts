@@ -15,8 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product) private productRepo: Repository<Product>,
-    private s3CoreServices: S3CoreService,
+    @InjectRepository(Product) private productRepo: Repository<Product>, //private s3CoreServices: S3CoreService,
   ) {}
   async findAll(page: number, pageSize: number) {
     if (page < 1 || pageSize < 1) throw new BadRequestException();
