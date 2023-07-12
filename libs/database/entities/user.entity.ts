@@ -34,6 +34,9 @@ export class User extends CustomBaseEntity {
   @Column()
   role: UserRole;
 
+  @Column()
+  avatarUrl: string;
+
   @OneToMany(() => Address, (address) => address.user)
   address: Address;
 

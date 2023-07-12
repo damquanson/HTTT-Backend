@@ -21,6 +21,10 @@ export class Product extends CustomBaseEntity {
 
   @Column()
   size: string;
+
+  @Column('json', { nullable: false })
+  imageArray: string[]; // or you can use a custom type if necessary
+
   @OneToMany(() => Video, (video) => video.product)
   video: Video[];
 }

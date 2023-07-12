@@ -7,8 +7,10 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './auth/roles.guard';
+
 import { AuthGuard } from './auth/auth.guard';
+import { ProductModule } from './modules/Product/product.module';
+import { S3CoreModule } from 'libs/s3/src';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { AuthGuard } from './auth/auth.guard';
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
     UserModule,
     AuthModule,
+    ProductModule,
+    S3CoreModule,
   ],
   controllers: [AppController],
   providers: [

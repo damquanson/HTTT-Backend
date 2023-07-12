@@ -11,4 +11,7 @@ export class Collection extends CustomBaseEntity {
 
   @Column()
   description: string;
+
+  @Column('json', { nullable: false })
+  image: string;
 }

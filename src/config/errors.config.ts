@@ -1,99 +1,14 @@
-export default {
-  PHONE_EXISTED: 'phone_exist',
-  PHONE_REQUIRED: 'phone_number_is_required',
-  EMAIL_EXISTED: 'email_exist',
-  NOT_ADMIN: 'not_admin',
-  ADMIN_NOT_FOUND: 'admin_not_found',
-  BOOKING_NOT_FOUND: 'booking_not_found',
-  FILE_NOT_FOUND: 'file_not_found',
-  ADMIN_INACTIVE: 'admin_inactive',
-  ADMIN_ID_NOT_FOUND: 'admin_id_not_found',
-  OTP_INVALID: 'otp_invalid',
-  EMAIL_INVALID_OTP: 'email_invalid_otp',
-  EMAIL_NOT_EXIST: 'email_not_exist',
-  CREATE_CONTRACT_FAIL: 'create_contract_fail',
-  MONTH_YEAR_IS_NUMBER: 'month_year_is_number',
-  MONTH_INVALID: 'month_invalid',
-  ACCOUNT_IS_NOT_AN_USE: 'account_is_not_an_use',
-  USER_NOT_FOUND: 'user_not_found',
-  USER_NOT_EXIST: 'user_not_exist',
-  NOT_FOUND_USER_FOR_EMAIL: 'not_found_user_for_email',
-  EXP_FIRST_LOGIN: 'time_to_log_in_for_the_first_time_exceeded',
-  EMAIL_WRONG: 'email_wrong',
-  PASSWORD_WRONG: 'password_wrong',
-  USERNAME_OR_PASSWORD_INVALID: 'username_or_password_invalid',
-  INVALID_RESET_PASSWORD_TOKEN: 'reset_password_token_invalid',
-  PASSWORD_NOT_MATCH: 'password_not_match',
-  PASSWORD_INVALID: 'password_invalid',
-  AUTHENTICATION_CODE_WRONG: 'authentication_code_wrong',
-  OTP_CODE_WRONG: 'otp_code_wrong',
-  IS_NOT_FIRST_LOGIN: 'is_not_first_login',
-  LOGIN_LINE_FAIL: 'login_line_fail',
-  LOGOUT_LINE_FAIL: 'logout_line_fail',
-  LOGIN_LINE_CONFLICT: 'login_line_conflict',
-  IS_NOT_KANA: 'is_not_katakana',
-  BANK_NUMBER_IS_NOT_STRING_NUMBER: 'bank_number_is_not_string_number',
-  OTP_TIME_EXPIRED: 'otp_time_expired',
-  MAX_COUNT_FILE_PDF: 'max_file_pfd',
-  PHONE_WRONG_FORMAT: 'phone_number_must_be_a_phone_number',
-  BUILDING_ID_NOT_EXACT: 'building_id_not_exact',
-  USER_CODE_DUPLICATE: 'user_code_duplicate',
-  LINE_ID_EXIST: 'line_id_existed',
-  BUILDING_NAME_OFFICIAL_EXIST: 'building_name_official_is_existed',
-  BUILDING_NAME_OR_BUILDING_CODE_EXIST:
-    'building_name_official_or_building_code_is_existed',
-  DOCUMENT_CONTAINS_BUILDING: 'document_contain_building',
-  VERIFY_GOOGLE_TOKEN_FAILED: 'verify_google_token_failed',
-  DOMAIN_UNAUTHORIZED: 'domain_unauthorized',
-  JUST_ALLOW_USER: 'just_allow_user',
-  JUST_ALLOW_ADMIN: 'just_allow_admin',
-  ACTION_DENY: 'action_deny',
-  USER_UPDATE_HISTORY_NOT_FOUND: 'user_update_history_not_found',
-  USER_UPDATE_HISTORY_HAVE_BEEN_CONFIRMED:
-    'user_update_history_have_been_confirmed',
-  FILE_SIZE_TOO_BIG: 'file_size_too_big',
-  FILE_SIZE_TOO_BIG_OR_WRONG_TYPE: 'file_size_too_big_or_wrong_type',
-  NUMBER_OF_FILES_EXCEEDS_ALLOWABLE_LIMIT:
-    'number_of_files_exceeds_allowable_limit',
-  SEND_EMAIL_FAIL: 'send_email_fail',
-  ERR_CANNOT_ACTION: 'can_not_action',
-  ERR_NOT_VALID_SIGNATURE: 'not_valid_signature',
-  ERR_MENU_NOT_FOUND: 'menu_not_found',
-  ERR_PAYMENT_METHOD_NOT_FOUND: 'payment_method_not_found',
-  ERR_DO_NOT_HAVE_PERMISSION: 'err_do_not_have_permission',
-  ERR_EDIT_MENU_ERROR: 'edit_menu_error',
-  ERR_DELETE_MENU_ERROR: 'delete_menu_error',
-  ERR_DELETE_SCHEDULE_ERROR: 'delete_schedule_error',
-  ERR_DATE_IS_NOT_VALIDATE: 'date_is_not_validate',
-  DO_NOT_HAVE_SCHEDULE_MATCH: 'do_not_have_schedule_match_with_time',
-  THIS_SCHEDULE_IS_BOOKED: 'this_schedule_is_booked',
-  ERR_CAN_NOT_DETELTE_THIS_DOCTOR: 'err_can_not_delete_this_doctor',
-  //Booking
-  CREATE_BOOKING_FAIL: 'create_booking_fail',
-  GET_LIST_BOOKING_FAIL: 'get_list_booking_fail',
-  BOOKING_NOT_EXIST: 'booking_not_exist',
-  ERR_CANCEL_BOOKING_COMPLETED: 'err_cancel_booking_completd',
-  //Schedule
-  SCHEDULE_HAS_ALREADY_CREATED: 'schedule_has_already_created',
-  SCHEDULE_IS_NOT_EXIST: 'schedule_is_not_exist',
-  END_TIME_MUST_GREATER_THAN_START_TIME:
-    'end_time_must_greater_than_start_time',
-  THIS_SCHEDULE_IS_HOLD: 'this_schedule_is_hold',
-  SCHEDULE_BUSY_IS_INVALID_TIME: 'schedule_busy_is_invalid_time',
-  SCHEDULE_BUSY_IS_EXIST: 'schedule_busy_is_exist',
-  ERR_SCHEDULE_BUSY_CAN_NOT_OVERRIDE_BOOKING:
-    'err_schedule_busy_can_not_override_booking',
-  ERR_DELETE_SCHEDULE_BUSY_ERROR: 'delete_schedule_busy_error',
-  // payment
-  PAYMENT_PROCESSING_OR_SUCCEEDED: 'payment_processing_or_succeeded',
-  PAYMENT_NOT_FOUND: 'payment_not_found',
-  EXPIRED_REFUND_DEPOSIT_FEE: 'expired_refund_deposit_fee',
-  CANNOT_REFUNDS_PAYMENT: 'cannot_refunds_payment',
-  AMOUNT_TOO_SMALL: 'amount_too_small',
-  NOT_VERIFY_PAYMENT: 'not_verify_payment',
+export const ErrorMessage = {
+  //User
+  USER_NOT_FOUND: 'User Not Found',
 
-  //user
-  GET_LIST_USER_FAIL: 'get_list_user_fail',
-  LINE_ID_UPDATED: 'line_id_updated',
-  TOKEN_EXPIRED: 'token_expired',
+  //Product
+  PRODUCT_NOT_FOUND: 'Product Not Found',
+
+
+  //Token
+  TOKEN_INVALID:' Token Invalid',
+
+  //File
+  VALIDATE_FILE_FAILED:'Files not PNG or > 3MB'
 };
