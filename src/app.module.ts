@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { ProductModule } from './modules/Product/product.module';
 import { S3CoreModule } from 'libs/s3/src';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { S3CoreModule } from 'libs/s3/src';
     AuthModule,
     ProductModule,
     S3CoreModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [
