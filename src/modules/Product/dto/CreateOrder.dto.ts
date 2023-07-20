@@ -11,13 +11,13 @@ export class CreateOrderDto {
   userId: number;
 
   @ApiProperty()
-  status: string;
-
-  @ApiProperty()
   paymentMethod: string;
 
   @ApiProperty()
   note: string;
+
+  @ApiProperty({ default: 0 })
+  total: number;
 
   @ApiProperty({ type: [Number] })
   productIdArray: number[];

@@ -4,9 +4,18 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Address } from './address.entity';
+import { OrderProduct } from './orderProduct.entity';
+
+export enum OrderStatus {
+  CONFIRMED = 'Confirmed',
+  SHIPPING = 'Shipping',
+  DONE = 'Done',
+  CANCEL = 'Cancel',
+}
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
@@ -30,11 +39,14 @@ export class Order {
   total: number;
 
   @Column()
-  status: string;
+  status: OrderStatus;
 
   @Column()
   paymentMethod: string;
 
   @Column()
   note: string;
+
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
+  orderProduct: OrderProduct[];
 }
