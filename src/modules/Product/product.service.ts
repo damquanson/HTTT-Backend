@@ -12,15 +12,18 @@ import { validateFiles } from 'libs/util/validate-image';
 import { S3CoreService } from 'libs/s3/src';
 import { v4 as uuidv4 } from 'uuid';
 import { ImageProduct } from 'libs/database/entities/imageProduct.entity';
-import { create } from 'domain';
 import { Readable } from 'stream';
-import { Order } from 'libs/database/entities/order.entity';
+import { Order, OrderStatus } from 'libs/database/entities/order.entity';
+import { CreateOrderDto } from './dto/CreateOrder.dto';
+import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Order) private orderRepo: Repository<Order>,
+    @InjectRepository(OrderProduct)
+    private orderProductRepo: Repository<OrderProduct>,
     @InjectRepository(ImageProduct) private imageRepo: Repository<ImageProduct>,
     private s3CoreServices: S3CoreService,
   ) {}
@@ -31,8 +34,14 @@ export class ProductService {
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
+    product.map(async (item) => {
+      for (const image of item.imageProduct) {
+        image['imageLink'] = await this.s3CoreServices.getLinkFromS3(image.key);
+      }
+      return item;
+    });
     return {
-      items: product,
+      productList: product,
       total,
       currentPage: page,
       limit: pageSize,
@@ -45,8 +54,7 @@ export class ProductService {
   ) {
     if (!validateFiles(files))
       throw new BadRequestException(ErrorMessage.VALIDATE_FILE_FAILED);
-    console.log(files);
-    console.log(createProductDto);
+
     const priceAsNumber = parseInt(createProductDto.price);
     const quantityAsNumber = parseInt(createProductDto.quantity);
     const createProductDtoNumber = {
@@ -91,7 +99,7 @@ export class ProductService {
     return productFound;
   }
 
-  async updateProduct(id: number, updateProductDto: CreateProductDto) {
+  async update(id: number, updateProductDto: CreateProductDto) {
     const priceAsNumber = parseInt(updateProductDto.price);
     const quantityAsNumber = parseInt(updateProductDto.quantity);
     const updateProductDtoNumber = {
@@ -106,5 +114,42 @@ export class ProductService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.productRepo.softDelete(id);
+  }
+  //Logic CRUD Order
+  async createOrder(createOrderDto: CreateOrderDto) {
+    createOrderDto.total = 0;
+    createOrderDto['status'] = OrderStatus.CONFIRMED;
+    const orderCreate = await this.orderRepo.save(createOrderDto);
+    let total = 0;
+    const orderProduct = await Promise.all(
+      createOrderDto?.productIdArray.map(async (item) => {
+        const productFound = await this.productRepo.findOne({
+          where: { id: item },
+        });
+        total = total + productFound.price;
+        return {
+          productId: item,
+          orderId: orderCreate.id,
+        };
+      }),
+    );
+    await this.orderProductRepo.save(orderProduct);
+    orderCreate.total = total;
+    const orderCreateFinal = await this.orderRepo.save(createOrderDto);
+
+    return orderCreateFinal;
+  }
+  async changeStatusOrder(
+    orderId: number,
+    userId: number,
+    status: OrderStatus,
+  ) {
+    const orderFound = await this.orderRepo.findOne({
+      where: { id: orderId, userId: userId },
+    });
+    if (!orderFound)
+      throw new BadRequestException(ErrorMessage.ORDER_NOT_FOUND);
+    orderFound.status = status;
+    await this.orderRepo.save(orderFound);
   }
 }

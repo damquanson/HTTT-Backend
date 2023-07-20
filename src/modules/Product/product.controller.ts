@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFiles,
@@ -18,23 +19,35 @@ import { ProductService } from './product.service';
 import { Roles, Role } from 'src/decorator/roles.decorator';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { CreateOrderDto } from './dto/CreateOrder.dto';
+import { ChangeStatusDto } from './dto/changeStatus-dto';
+import { GetUser } from 'src/decorator/user.decorator';
 
 @UseGuards(RolesGuard)
-@ApiTags('Product')
+@ApiTags('Product And Order')
 @ApiBearerAuth()
-@Controller('product')
+@Controller('')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  // @Post('order/create')
-  // createOrder(
-  //   @Body() createOrderDto: CreateOrderDto,
+  @Post('order/create')
+  createOrder(@Body() createOrderDto: CreateOrderDto) {
+    return this.productService.createOrder(createOrderDto);
+  }
 
+  // @Post('order/change-status')
+  // changeStatusOrder(
+  //   @Body() changeStatusDto: ChangeStatusDto,
+  //   @GetUser() user: any,
   // ) {
-  //   return this.productService.createProduct(createProductDto)
+  //   return this.productService.changeStatusOrder(
+  //     changeStatusDto?.productId,
+  //     user.id
+  //     changeStatusDto.status,
+  //   );
   // }
 
-  @Post()
+  @Post('product')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 5)) // Limit number of max file
   signUp(
@@ -44,7 +57,7 @@ export class ProductController {
     return this.productService.createProduct(createProductDto, files);
   }
 
-  @Get()
+  @Get('product')
   @Roles(Role.Admin)
   @ApiQuery({ name: 'page', type: Number })
   @ApiQuery({ name: 'pageSize', type: Number })
@@ -52,18 +65,18 @@ export class ProductController {
     return this.productService.findAll(page, pageSize);
   }
 
-  @Get(':id')
+  @Get('product/:id')
   @Roles(Role.Admin)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOneById(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
-  //   return this.productService.update(+id, updateUserDto);
-  // }
+  @Patch('product/:id')
+  update(@Param('id') id: string, @Body() updateProductDto: CreateProductDto) {
+    return this.productService.update(+id, updateProductDto);
+  }
 
-  @Delete(':id')
+  @Delete('product/:id')
   @Roles(Role.Admin)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);

@@ -5,10 +5,11 @@ export const ErrorMessage = {
   //Product
   PRODUCT_NOT_FOUND: 'Product Not Found',
 
+  ORDER_NOT_FOUND: 'Order Not Found',
 
   //Token
-  TOKEN_INVALID:' Token Invalid',
+  TOKEN_INVALID: ' Token Invalid',
 
   //File
-  VALIDATE_FILE_FAILED:'Files not PNG or > 3MB'
+  VALIDATE_FILE_FAILED: 'Files not PNG or > 3MB',
 };
