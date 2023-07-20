@@ -14,10 +14,10 @@ export class ImageProduct {
   id: number;
 
   @Column()
-  filename: string;
+  fileName: string;
 
   @Column()
-  mimetype: string;
+  mimeType: string;
 
   @Column()
   key: string;
