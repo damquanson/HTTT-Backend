@@ -26,6 +26,14 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  // @Post('order/create')
+  // createOrder(
+  //   @Body() createOrderDto: CreateOrderDto,
+
+  // ) {
+  //   return this.productService.createProduct(createProductDto)
+  // }
+
   @Post()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 5)) // Limit number of max file
@@ -33,7 +41,7 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.productService.createProduct(createProductDto,files)
+    return this.productService.createProduct(createProductDto, files);
   }
 
   @Get()

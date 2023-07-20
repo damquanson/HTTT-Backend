@@ -1,8 +1,8 @@
-export const validateFiles=(files: Express.Multer.File[]) => {
+export const validateFiles = (files: Express.Multer.File[]) => {
   for (const file of files) {
     // Kiểm tra kích thước file
-    if (file.size > 3 * 1024 * 1024) {
-      return false; // Kích thước vượt quá 3MB
+    if (file.size > 10 * 1024 * 1024) {
+      return false; // Kích thước vượt quá 10MB
     }
 
     // Kiểm tra định dạng file
@@ -12,9 +12,4 @@ export const validateFiles=(files: Express.Multer.File[]) => {
   }
 
   return true; // Tất cả các file đều hợp lệ
-}
-
-
-
-
-
+};

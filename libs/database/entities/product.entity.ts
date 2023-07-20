@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import CustomBaseEntity from './base.entity';
 import { Video } from './video.entity';
+import { ImageProduct } from './imageProduct.entity';
 
 @Entity()
 export class Product extends CustomBaseEntity {
@@ -22,9 +23,9 @@ export class Product extends CustomBaseEntity {
   @Column()
   size: string;
 
-  @Column('json', { nullable: false })
-  imageArray: string[]; // or you can use a custom type if necessary
-
   @OneToMany(() => Video, (video) => video.product)
   video: Video[];
+
+  @OneToMany(() => ImageProduct, (imageProduct) => imageProduct.product)
+  imageProduct: ImageProduct[];
 }
