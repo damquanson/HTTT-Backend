@@ -24,7 +24,8 @@ export class UserService {
       createUserDto.password,
       saltRounds,
     );
-
+    createUserDto['avatarUrl'] =
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png';
     const userCreate = await this.userRepo.save(createUserDto);
     const { password, ...result } = userCreate;
     return result;

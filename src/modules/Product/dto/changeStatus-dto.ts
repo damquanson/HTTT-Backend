@@ -1,15 +1,20 @@
-import { IsString, IsNumber, IsArray, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsArray,
+  IsNotEmpty,
+  IsIn,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { OrderStatus } from 'aws-sdk/clients/outposts';
+import { OrderStatus } from 'libs/database/entities/order.entity';
 
 export class ChangeStatusDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  userId: number;
-
   @ApiProperty()
   orderId: number;
 
   @ApiProperty()
+  @IsString()
+  @IsEnum(OrderStatus)
   status: OrderStatus;
 }

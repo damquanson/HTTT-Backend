@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'libs/database/entities/product.entity';
 import { ErrorMessage } from 'src/config/errors.config';
-import { DeleteResult, Repository } from 'typeorm';
+import { Collection, DeleteResult, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { validateFiles } from 'libs/util/validate-image';
 import { S3CoreService } from 'libs/s3/src';
@@ -16,6 +16,7 @@ import { Readable } from 'stream';
 import { Order, OrderStatus } from 'libs/database/entities/order.entity';
 import { CreateOrderDto } from './dto/CreateOrder.dto';
 import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
+import { CartProduct } from 'libs/database/entities/cartProduct.entity';
 
 @Injectable()
 export class ProductService {
@@ -24,6 +25,8 @@ export class ProductService {
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(OrderProduct)
     private orderProductRepo: Repository<OrderProduct>,
+    @InjectRepository(CartProduct)
+    private cartProductRepo: Repository<CartProduct>,
     @InjectRepository(ImageProduct) private imageRepo: Repository<ImageProduct>,
     private s3CoreServices: S3CoreService,
   ) {}
@@ -144,6 +147,7 @@ export class ProductService {
     userId: number,
     status: OrderStatus,
   ) {
+    console.log(orderId, userId);
     const orderFound = await this.orderRepo.findOne({
       where: { id: orderId, userId: userId },
     });
@@ -151,5 +155,36 @@ export class ProductService {
       throw new BadRequestException(ErrorMessage.ORDER_NOT_FOUND);
     orderFound.status = status;
     await this.orderRepo.save(orderFound);
+    return true;
+  }
+
+  //Logic Add/Delete To Cart
+  async addProductToCart(productId: number, userId: number) {
+    const productUser = await this.cartProductRepo.findOne({
+      where: {
+        productId: productId,
+        userId: userId,
+      },
+    });
+    if (!productUser)
+      return await this.cartProductRepo.save({
+        productId: productId,
+        userId: userId,
+      });
+  }
+  async deleteProductCart(productId: number, userId: number) {
+    const productUser = await this.cartProductRepo.findOne({
+      where: {
+        productId: productId,
+        userId: userId,
+      },
+    });
+    if (productUser)
+      return (
+        (await this.cartProductRepo.softDelete(productUser.id)).affected > 0
+      );
+  }
+  async getCart(userId: number) {
+    return await this.cartProductRepo.find({ where: { userId: userId } });
   }
 }
