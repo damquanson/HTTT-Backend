@@ -8,10 +8,18 @@ import { S3CoreModule } from 'libs/s3/src';
 import { ImageProduct } from 'libs/database/entities/imageProduct.entity';
 import { Order } from 'libs/database/entities/order.entity';
 import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
+import { CartProduct } from 'libs/database/entities/cartProduct.entity';
+import { Collection } from 'typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, ImageProduct, Order, OrderProduct]),
+    TypeOrmModule.forFeature([
+      Product,
+      ImageProduct,
+      Order,
+      OrderProduct,
+      CartProduct,
+    ]),
     S3CoreModule,
   ],
   controllers: [ProductController],
