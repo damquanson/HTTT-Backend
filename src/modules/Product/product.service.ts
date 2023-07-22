@@ -97,6 +97,11 @@ export class ProductService {
       where: { id: id },
       relations: ['imageProduct'],
     });
+
+    for (const image of productFound.imageProduct) {
+      image['imageLink'] = await this.s3CoreServices.getLinkFromS3(image.key);
+    }
+
     if (!productFound)
       throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
     return productFound;
