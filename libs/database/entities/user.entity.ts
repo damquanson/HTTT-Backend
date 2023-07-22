@@ -37,6 +37,9 @@ export class User extends CustomBaseEntity {
   @Column()
   avatarUrl: string;
 
+  @Column({ type: 'datetime', nullable: true })
+  dateOfBirth: Date;
+
   @OneToMany(() => Address, (address) => address.user)
   address: Address;
 

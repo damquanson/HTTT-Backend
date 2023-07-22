@@ -9,10 +9,15 @@ import * as bcrypt from 'bcryptjs';
 import { User } from 'libs/database/entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Address } from 'libs/database/entities/address.entity';
+import { CreateAddressDto } from './dto/create-Address.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Address) private addressRepo: Repository<Address>,
+  ) {}
   async create(createUserDto: CreateUserDto) {
     const emailExist = await this.userRepo.findOneBy({
       email: createUserDto.email,
@@ -62,5 +67,38 @@ export class UserService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.userRepo.softDelete(id);
+  }
+
+  async createAddress(createAddressDto: CreateAddressDto, userId: number) {
+    createAddressDto['userId'] = userId;
+    const userCreate = await this.addressRepo.save(createAddressDto);
+    return userCreate;
+  }
+
+  async findAllAddress(page: number, pageSize: number) {
+    if (page < 1 || pageSize < 1) throw new BadGatewayException();
+    const [address, total] = await this.addressRepo.findAndCount({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    return {
+      items: address,
+      total,
+      currentPage: page,
+      limit: pageSize,
+    };
+  }
+
+  async findOneAddress(id: number): Promise<Address> {
+    return this.addressRepo.findOneBy({ id: id });
+  }
+
+  updateAddress(id: number, updateAddressDto: CreateAddressDto) {
+    return this.addressRepo.update(id, updateAddressDto);
+  }
+
+  removeAddress(id: number): Promise<DeleteResult> {
+    return this.addressRepo.softDelete(id);
   }
 }

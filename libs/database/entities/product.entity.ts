@@ -17,11 +17,14 @@ export class Product extends CustomBaseEntity {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ type: 'text' })
   detail: string;
 
   @Column()
   size: string;
+
+  @Column()
+  color: string;
 
   @OneToMany(() => Video, (video) => video.product)
   video: Video[];
