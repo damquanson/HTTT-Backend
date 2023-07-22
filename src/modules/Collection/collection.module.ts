@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { S3CoreModule } from 'libs/s3/src';
-import { Collection } from 'typeorm';
+import { Collection } from 'libs/database/entities/collection.entity';
 import { CollectionController } from './collection.controller';
 import { CollectionService } from './collection.service';
 

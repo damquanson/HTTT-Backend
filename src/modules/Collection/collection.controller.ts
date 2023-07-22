@@ -16,6 +16,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { Roles, Role } from 'src/decorator/roles.decorator';
 import { CreateProductDto } from '../Product/dto/CreateProduct.dto';
+import { CreateCollectionDto } from './dto/CreateProduct.dto';
 
 @Controller('collection')
 export class CollectionController {
@@ -26,36 +27,38 @@ export class CollectionController {
   @ApiQuery({ name: 'page', type: Number })
   @ApiQuery({ name: 'pageSize', type: Number })
   findAllCollection(@Query('page') page = 1, @Query('pageSize') pageSize = 10) {
-    return this.productService.findAll(page, pageSize);
+    return this.collectionService.findAll(page, pageSize);
   }
 
   @Get('collection/:id')
   @Roles(Role.Admin)
   findOneCollection(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.findOneById(id);
+    return this.collectionService.findOneById(id);
   }
 
   @Post('collection')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 1)) // Limit number of max file
   createCollection(
-    @Body() createProductDto: CreateProductDto,
+    @Body() createCollectionDto: CreateCollectionDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.productService.createProduct(createProductDto, files);
+    return this.collectionService.createCollection(createCollectionDto, files);
   }
 
   @Patch('collection/:id')
+  @UseInterceptors(FilesInterceptor('files', 1)) // Limit number of max file
   updateCollection(
-    @Param('id') id: string,
-    @Body() updateProductDto: CreateProductDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createCollectionDto: CreateCollectionDto,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.productService.update(+id, updateProductDto);
+    return this.collectionService.update(id, createCollectionDto, files);
   }
 
   @Delete('collection/:id')
   @Roles(Role.Admin)
   removeCollection(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.remove(id);
+    return this.collectionService.remove(id);
   }
 }
