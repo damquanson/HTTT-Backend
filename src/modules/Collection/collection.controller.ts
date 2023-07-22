@@ -13,12 +13,20 @@ import {
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiQuery, ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiQuery,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { Roles, Role } from 'src/decorator/roles.decorator';
 import { CreateProductDto } from '../Product/dto/CreateProduct.dto';
 import { CreateCollectionDto } from './dto/CreateCollection.dto';
 
-@Controller('collection')
+@Controller('')
+@ApiTags('Collection')
+@ApiBearerAuth()
 export class CollectionController {
   constructor(private collectionService: CollectionService) {}
 
@@ -38,7 +46,7 @@ export class CollectionController {
 
   @Post('collection')
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FilesInterceptor('files', 1)) // Limit number of max file
+  @UseInterceptors(FilesInterceptor('files', 2)) // Limit number of max file
   createCollection(
     @Body() createCollectionDto: CreateCollectionDto,
     @UploadedFiles() files: Express.Multer.File[],

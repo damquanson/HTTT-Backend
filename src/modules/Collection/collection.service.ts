@@ -33,15 +33,18 @@ export class CollectionService {
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
-
-    return {
-      list: collection.map(async (item) => {
+    const collectionWithImage = await Promise.all(
+      collection.map(async (item) => {
         const imageLink = await this.s3CoreServices.getLinkFromS3(item.image);
         return {
           ...item,
           imageLink,
         };
       }),
+    );
+    console.log(collectionWithImage);
+    return {
+      list: collectionWithImage,
       total,
       currentPage: page,
       limit: pageSize,
@@ -59,6 +62,7 @@ export class CollectionService {
 
     const prefix = 'collection';
     let key: string;
+    console.log(files);
     for (const file of files) {
       key = `${prefix}/${uuidv4()}/${file.originalname}`;
       const fileName = file.originalname;
@@ -69,8 +73,9 @@ export class CollectionService {
       readableStream.push(file.buffer);
       readableStream.push(null); // End the stream
       await this.s3CoreServices.uploadFileWithStream(readableStream, key);
+      createCollectionDto['image'] = key;
     }
-    createCollectionDto['image'] = key;
+
     const collectionCreate = await this.collectionRepo.save(
       createCollectionDto,
     );
@@ -82,6 +87,11 @@ export class CollectionService {
     const collectionFound = await this.collectionRepo.findOne({
       where: { id: id },
     });
+
+    collectionFound['imageLink'] = await this.s3CoreServices.getLinkFromS3(
+      collectionFound.image,
+    );
+
     if (!collectionFound) throw new NotFoundException('COLLECTION_NOT_FOUND');
     return collectionFound;
   }
