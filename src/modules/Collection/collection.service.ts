@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'aws-sdk/clients/ssm';
 import { validateFiles } from 'libs/util/validate-image';
 import { ErrorMessage } from 'src/config/errors.config';
 import { Repository, DeleteResult } from 'typeorm';
@@ -14,12 +13,18 @@ import { Collection } from 'libs/database/entities/collection.entity';
 import { S3CoreService } from 'libs/s3/src';
 import { CreateCollectionDto } from './dto/CreateProduct.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { Product } from 'libs/database/entities/product.entity';
+import { ProductCollection } from 'libs/database/entities/productCollection.entity';
 
 @Injectable()
 export class CollectionService {
   constructor(
     @InjectRepository(Collection)
     private collectionRepo: Repository<Collection>,
+    @InjectRepository(Product)
+    private productRepo: Repository<Product>,
+    @InjectRepository(ProductCollection)
+    private productCollectionRepo: Repository<ProductCollection>,
     private s3CoreServices: S3CoreService,
   ) {}
   async findAll(page: number, pageSize: number) {
@@ -108,5 +113,42 @@ export class CollectionService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.collectionRepo.softDelete(id);
+  }
+
+  async addProduct(collectionId: number, productId: number) {
+    const collectionFound = await this.collectionRepo.find({
+      where: { id: collectionId },
+    });
+    const productFound = await this.productRepo.find({
+      where: { id: productId },
+    });
+    if (!collectionFound || !productFound) throw new NotFoundException();
+    return await this.productCollectionRepo.save({
+      collectionId: collectionId,
+      productId: productId,
+    });
+  }
+
+  async deleteProduct(collectionId: number, productId: number) {
+    const collectionFound = await this.collectionRepo.find({
+      where: { id: collectionId },
+    });
+    const productFound = await this.productRepo.find({
+      where: { id: productId },
+    });
+    if (!collectionFound || !productFound) throw new NotFoundException();
+    const productCollectionFound = await this.productCollectionRepo.findOne({
+      where: {
+        collectionId: collectionId,
+        productId: productId,
+      },
+    });
+
+    if (productCollectionFound) {
+      throw new NotFoundException('Product not found in the collection');
+    }
+    return await this.productCollectionRepo.softDelete(
+      productCollectionFound.id,
+    );
   }
 }

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiQuery, ApiConsumes } from '@nestjs/swagger';
+import { ApiQuery, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { Roles, Role } from 'src/decorator/roles.decorator';
 import { CreateProductDto } from '../Product/dto/CreateProduct.dto';
 import { CreateCollectionDto } from './dto/CreateProduct.dto';
@@ -60,5 +60,22 @@ export class CollectionController {
   @Roles(Role.Admin)
   removeCollection(@Param('id', ParseIntPipe) id: number) {
     return this.collectionService.remove(id);
+  }
+
+  @Post('add-product/:collectionId/:productId')
+  @ApiOperation({ description: 'API add product to collection' })
+  addProductToCollection(
+    @Param('collectionId', ParseIntPipe) collectionId: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.collectionService.addProduct(collectionId, productId);
+  }
+  @Delete('add-product/:collectionId/:productId')
+  @ApiOperation({ description: 'API add product to collection' })
+  deleteProductToCollection(
+    @Param('collectionId', ParseIntPipe) collectionId: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.collectionService.deleteProduct(collectionId, productId);
   }
 }
