@@ -11,7 +11,7 @@ import { Readable } from 'typeorm/platform/PlatformTools';
 import { CreateProductDto } from '../Product/dto/CreateProduct.dto';
 import { Collection } from 'libs/database/entities/collection.entity';
 import { S3CoreService } from 'libs/s3/src';
-import { CreateCollectionDto } from './dto/CreateProduct.dto';
+import { CreateCollectionDto } from './dto/CreateCollection.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Product } from 'libs/database/entities/product.entity';
 import { ProductCollection } from 'libs/database/entities/productCollection.entity';

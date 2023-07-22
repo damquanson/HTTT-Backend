@@ -24,4 +24,9 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   size: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  color: string;
 }

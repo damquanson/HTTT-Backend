@@ -16,7 +16,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiQuery, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { Roles, Role } from 'src/decorator/roles.decorator';
 import { CreateProductDto } from '../Product/dto/CreateProduct.dto';
-import { CreateCollectionDto } from './dto/CreateProduct.dto';
+import { CreateCollectionDto } from './dto/CreateCollection.dto';
 
 @Controller('collection')
 export class CollectionController {

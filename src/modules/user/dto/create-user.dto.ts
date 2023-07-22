@@ -44,4 +44,8 @@ export class CreateUserDto {
   @IsBoolean()
   @ApiProperty()
   status: boolean;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  dateOfBirth: Date;
 }
