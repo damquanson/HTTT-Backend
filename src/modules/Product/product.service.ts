@@ -4,21 +4,21 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'libs/database/entities/product.entity';
-import { ErrorMessage } from 'src/config/errors.config';
-import { Collection } from 'libs/database/entities/collection.entity';
-import { DeleteResult, Repository } from 'typeorm';
-import { CreateProductDto } from './dto/CreateProduct.dto';
-import { validateFiles } from 'libs/util/validate-image';
-import { S3CoreService } from 'libs/s3/src';
-import { v4 as uuidv4 } from 'uuid';
-import { ImageProduct } from 'libs/database/entities/imageProduct.entity';
-import { Readable } from 'stream';
-import { Order, OrderStatus } from 'libs/database/entities/order.entity';
-import { CreateOrderDto } from './dto/CreateOrder.dto';
-import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
 import { CartProduct } from 'libs/database/entities/cartProduct.entity';
+import { Collection } from 'libs/database/entities/collection.entity';
+import { ImageProduct } from 'libs/database/entities/imageProduct.entity';
+import { Order, OrderStatus } from 'libs/database/entities/order.entity';
+import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
+import { Product } from 'libs/database/entities/product.entity';
 import { ProductCollection } from 'libs/database/entities/productCollection.entity';
+import { S3CoreService } from 'libs/s3/src';
+import { validateFiles } from 'libs/util/validate-image';
+import { ErrorMessage } from 'src/config/errors.config';
+import { Readable } from 'stream';
+import { DeleteResult, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import { CreateOrderDto } from './dto/CreateOrder.dto';
+import { CreateProductDto } from './dto/CreateProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -35,7 +35,7 @@ export class ProductService {
     private cartProductRepo: Repository<CartProduct>,
     @InjectRepository(ImageProduct) private imageRepo: Repository<ImageProduct>,
     private s3CoreServices: S3CoreService,
-  ) { }
+  ) {}
   async findAll(page: number, pageSize: number) {
     if (page < 1 || pageSize < 1) throw new BadRequestException();
     const [product, total] = await this.productRepo.findAndCount({
