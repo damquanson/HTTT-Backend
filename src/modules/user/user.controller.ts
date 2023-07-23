@@ -23,7 +23,7 @@ import { GetUser, UserInfoAuth } from 'src/decorator/user.decorator';
 @ApiBearerAuth()
 @Controller('')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('user')
   @Roles(Role.Admin)
@@ -58,7 +58,7 @@ export class UserController {
     return this.userService.createAddress(createAddressDto, user.id);
   }
   @Get('address')
-  @Roles(Role.User)
+  // @Roles(Role.User)
   @ApiQuery({ name: 'page', type: Number })
   @ApiQuery({ name: 'pageSize', type: Number })
   findAllAddress(@Query('page') page = 1, @Query('pageSize') pageSize = 10) {
