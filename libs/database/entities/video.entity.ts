@@ -15,7 +15,7 @@ export class Video {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'text' })
   link: string;
 
   @Column()
