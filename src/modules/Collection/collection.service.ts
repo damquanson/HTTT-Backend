@@ -42,7 +42,6 @@ export class CollectionService {
         };
       }),
     );
-    console.log(collectionWithImage);
     return {
       list: collectionWithImage,
       total,
@@ -93,7 +92,25 @@ export class CollectionService {
     );
 
     if (!collectionFound) throw new NotFoundException('COLLECTION_NOT_FOUND');
-    return collectionFound;
+    const listProductCollection = await this.productCollectionRepo.find({
+      where: { collectionId: id },
+    });
+
+    let productList: Product[];
+    for (const productId of listProductCollection) {
+      const productFound = await this.productRepo.findOne({
+        where: { id: productId.productId },
+        relations: ['imageProduct'],
+      });
+      if (!productFound)
+        throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
+
+      for (const image of productFound.imageProduct) {
+        image['imageLink'] = await this.s3CoreServices.getLinkFromS3(image.key);
+      }
+      productList.push(productFound);
+    }
+    return { collection: collectionFound, productList: productList };
   }
 
   async update(

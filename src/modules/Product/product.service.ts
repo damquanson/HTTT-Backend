@@ -6,7 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'libs/database/entities/product.entity';
 import { ErrorMessage } from 'src/config/errors.config';
-import { Collection, DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { Collection } from 'libs/database/entities/collection.entity';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { validateFiles } from 'libs/util/validate-image';
 import { S3CoreService } from 'libs/s3/src';
@@ -17,11 +18,16 @@ import { Order, OrderStatus } from 'libs/database/entities/order.entity';
 import { CreateOrderDto } from './dto/CreateOrder.dto';
 import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
 import { CartProduct } from 'libs/database/entities/cartProduct.entity';
+import { ProductCollection } from 'libs/database/entities/productCollection.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepo: Repository<Product>,
+    @InjectRepository(Collection)
+    private collectionRepo: Repository<Collection>,
+    @InjectRepository(ProductCollection)
+    private productCollectionRepo: Repository<ProductCollection>,
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(OrderProduct)
     private orderProductRepo: Repository<OrderProduct>,
@@ -92,19 +98,34 @@ export class ProductService {
       relations: ['imageProduct'],
     });
   }
-  async findOneById(id: number): Promise<Product> {
+  async findOneById(id: number) {
     const productFound = await this.productRepo.findOne({
       where: { id: id },
       relations: ['imageProduct'],
     });
+    if (!productFound)
+      throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
 
     for (const image of productFound.imageProduct) {
       image['imageLink'] = await this.s3CoreServices.getLinkFromS3(image.key);
     }
 
-    if (!productFound)
-      throw new NotFoundException(ErrorMessage.PRODUCT_NOT_FOUND);
-    return productFound;
+    let collectionList: Collection[];
+    const productCollection = await this.productCollectionRepo.find({
+      where: { productId: id },
+    });
+    for (const collection of productCollection) {
+      const collectionFound = await this.collectionRepo.findOne({
+        where: { id: collection.collectionId },
+      });
+
+      collectionFound['imageLink'] = await this.s3CoreServices.getLinkFromS3(
+        collectionFound.image,
+      );
+
+      collectionList.push(collectionFound);
+    }
+    return { product: productFound, collectionList: collectionList };
   }
 
   async update(id: number, updateProductDto: CreateProductDto) {

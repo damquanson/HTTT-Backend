@@ -9,6 +9,8 @@ import { ImageProduct } from 'libs/database/entities/imageProduct.entity';
 import { Order } from 'libs/database/entities/order.entity';
 import { OrderProduct } from 'libs/database/entities/orderProduct.entity';
 import { CartProduct } from 'libs/database/entities/cartProduct.entity';
+import { Collection } from 'libs/database/entities/collection.entity';
+import { ProductCollection } from 'libs/database/entities/productCollection.entity';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { CartProduct } from 'libs/database/entities/cartProduct.entity';
       Order,
       OrderProduct,
       CartProduct,
+      Collection,
+      ProductCollection,
     ]),
     S3CoreModule,
   ],
