@@ -96,7 +96,7 @@ export class CollectionService {
       where: { collectionId: id },
     });
 
-    let productList: Product[];
+    let productList: Product[] = [];
     for (const productId of listProductCollection) {
       const productFound = await this.productRepo.findOne({
         where: { id: productId.productId },

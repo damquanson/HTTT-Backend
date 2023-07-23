@@ -8,6 +8,8 @@ import { Product } from 'libs/database/entities/product.entity';
 import { ErrorMessage } from 'src/config/errors.config';
 import { DeleteResult, Repository } from 'typeorm';
 import { Collection } from 'libs/database/entities/collection.entity';
+import { DeleteResult, Repository } from 'typeorm';
+import { Collection } from 'libs/database/entities/collection.entity';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { validateFiles } from 'libs/util/validate-image';
 import { S3CoreService } from 'libs/s3/src';
@@ -110,7 +112,7 @@ export class ProductService {
       image['imageLink'] = await this.s3CoreServices.getLinkFromS3(image.key);
     }
 
-    let collectionList: Collection[];
+    let collectionList: Collection[] = [];
     const productCollection = await this.productCollectionRepo.find({
       where: { productId: id },
     });
