@@ -6,10 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'libs/database/entities/product.entity';
 import { ErrorMessage } from 'src/config/errors.config';
-import { DeleteResult, Repository } from 'typeorm';
 import { Collection } from 'libs/database/entities/collection.entity';
 import { DeleteResult, Repository } from 'typeorm';
-import { Collection } from 'libs/database/entities/collection.entity';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { validateFiles } from 'libs/util/validate-image';
 import { S3CoreService } from 'libs/s3/src';
@@ -37,7 +35,7 @@ export class ProductService {
     private cartProductRepo: Repository<CartProduct>,
     @InjectRepository(ImageProduct) private imageRepo: Repository<ImageProduct>,
     private s3CoreServices: S3CoreService,
-  ) {}
+  ) { }
   async findAll(page: number, pageSize: number) {
     if (page < 1 || pageSize < 1) throw new BadRequestException();
     const [product, total] = await this.productRepo.findAndCount({
